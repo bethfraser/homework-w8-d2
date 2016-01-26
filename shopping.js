@@ -39,6 +39,10 @@ var myBasket = {
     }
     return total;
   },
+
+
+
+
   bogof: function(){
     var filterBogof = function(item){
       if(item.bogof === true){
@@ -49,16 +53,16 @@ var myBasket = {
       }
     }
     var bogofArray = this.items.filter(filterBogof);
-    var bogofItemArray = [];
+    var oneOfEachItemArray = [];
     for(item of bogofArray){
-      if(!bogofItemArray.contains(item)){
-        bogofItemArray.push(item);
+      if(!oneOfEachItemArray.contains(item)){
+        oneOfEachItemArray.push(item);
       }
     }
     var priceToDiscount = 0;
    
-    for(var item of bogofItemArray){
-      var onlyThisItem = function(item_to_find){
+    for(var item of oneOfEachItemArray){
+      var filterOnlyThisItem = function(item_to_find){
         if(item == item_to_find){
           return true;
         }
@@ -66,16 +70,17 @@ var myBasket = {
           return false;
         }
       }
-      var arrayOfThisItem = bogofArray.filter(onlyThisItem);
-      var number = arrayOfThisItem.length;
-      var remainder = number % 2;
-      number = number - remainder;
-      number = number / 2;
-      var price = item.price * number;
+      var arrayOfThisItem = bogofArray.filter(filterOnlyThisItem);
+      var numberOfThisItem = arrayOfThisItem.length;
+      var remainder = numberOfThisItem % 2;
+      var numberOfPairs = numberOfThisItem - remainder;
+      var discountNumber = numberOfPairs / 2;
+      var price = item.price * discountNumber;
       priceToDiscount += price;
     }
     return priceToDiscount;
   },
+
   totalwithbogof: function(){
     var totalwithbogof = this.total() - this.bogof();
     return totalwithbogof;
