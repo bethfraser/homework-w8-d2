@@ -14,6 +14,7 @@ Array.prototype.unique = function () {
      }
      return newArray;
 }
+
 Array.prototype.collect = function ( item_function, argument ) {
   var collectArray = []
    for (item of this) {
@@ -27,29 +28,38 @@ Array.prototype.collect = function ( item_function, argument ) {
 var banana = {
   name: "banana",
   price: 1,
-  bogof: true,
+  discount: true,
+  discountAmount: [2, 1]
 }
 
 var cake = {
   name: "cake",
   price: 3,
-  bogof: true,
+  discount: true,
+  discountAmount: [2, 1]
 }
 
 var chicken = {
   name: "chicken",
   price: 4.5,
-  bogof: false,
+  discount: false,
 }
 
 var pizza = {
   name: "pizza",
   price: 3,
-  bogof: false,
+  discount: false,
+}
+
+var soap = {
+  name: "soap",
+  price: 2,
+  discount: true,
+  discountAmount: [3, 1]
 }
 
 var myBasket = {
-  items: [ banana, banana, cake, cake, cake, chicken, chicken, pizza, pizza ],
+  items: [ banana, banana, cake, cake, cake, chicken, chicken, pizza, pizza, soap, soap, soap, soap ],
   discountCard: false,
   total: function(){
     var total = 0;
@@ -59,25 +69,27 @@ var myBasket = {
     return total;
   },
 
-  bogof: function(){
+  calcDiscounts: function(){
     var priceToDiscount = 0;
-    var bogofArray = this.items.collect("bogof", true);
-    var oneOfEachItemArray = bogofArray.unique();
+    var discountArray = this.items.collect("discount", true);
+    var oneOfEachItemArray = discountArray.unique();
    
     for(var item of oneOfEachItemArray){
-      var numberOfThisItem = bogofArray.collect("name", item.name).length;
-      var discountNumber = (numberOfThisItem - (numberOfThisItem % 2)) / 2;
+      var numberOfThisItem = discountArray.collect("name", item.name).length;
+      var remainder = numberOfThisItem % item.discountAmount[0];
+      var discountItems = numberOfThisItem - remainder;
+      var discountNumber = (discountItems / item.discountAmount[0]) * item.discountAmount[1];
       priceToDiscount += (item.price * discountNumber);
     }
     return priceToDiscount;
   },
 
-  totalwithbogof: function(){
-    var totalwithbogof = this.total() - this.bogof();
-    return totalwithbogof;
+  totalWithDiscounts: function(){
+    var totalwithdiscounts = this.total() - this.calcDiscounts();
+    return totalwithdiscounts;
   },
   price: function(){
-    var total = this.totalwithbogof();
+    var total = this.totalWithDiscounts();
     if(total >= 20){
       var price = total * 0.9;
     }

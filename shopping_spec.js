@@ -12,20 +12,20 @@ var assert = require('assert');
 describe('Shopping Basket', function(){
   it('should calculate the total cost of all items', function(){
     var total = basket.total();
-    assert.equal(26, total);
+    assert.equal(34, total);
   });
-  it('should take discount off for BOGOF items', function(){
-    var totalwithbogof = basket.totalwithbogof();
-    assert.equal(22, totalwithbogof);
+  it('should take discount off for BOGOF and 3for2 items', function(){
+    var totalwithdiscounts = basket.totalWithDiscounts();
+    assert.equal(28, totalwithdiscounts);
   });
   it('should apply a 10% discount on baskets over £20', function(){
     var price = basket.price();
-    assert.equal(19.8, price)
+    assert.equal(25.2, price)
   });
   it('should apply a 5% discount if the basket has a discount card', function(){
     basket.discountCard = true;
-    var price = basket.price();
-    assert.equal(18.81, price)
+    var price = basket.price().toFixed(2);
+    assert.equal(23.94, price)
   });
 
 
