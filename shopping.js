@@ -88,6 +88,9 @@ var myBasket = {
     else {
       var price = total;
     }
+    if(this.discountCard === true){
+      price = price * 0.95
+    }
     return price;
   },
 

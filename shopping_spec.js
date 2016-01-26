@@ -27,7 +27,11 @@ describe('Shopping Basket', function(){
     var price = basket.price();
     assert.equal(19.8, price)
   });
-
+  it('should apply a 5% discount if the basket has a discount card', function(){
+    basket.discountCard = true;
+    var price = basket.price();
+    assert.equal(18.81, price)
+  });
 
 
 
