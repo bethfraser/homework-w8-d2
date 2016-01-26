@@ -5,6 +5,25 @@ Array.prototype.contains = function ( needle ) {
    return false;
 }
 
+Array.prototype.unique = function () {
+    var newArray = [];
+   for (item of this) {
+       if (!newArray.contains(item)) {
+        newArray.push(item);
+       }
+     }
+     return newArray;
+}
+Array.prototype.collect = function ( item_function, argument ) {
+  var collectArray = []
+   for (item of this) {
+       if (item[item_function] == argument){
+        collectArray.push(item);
+       } 
+     }
+     return collectArray;
+}
+
 var banana = {
   name: "banana",
   price: 1,
@@ -40,43 +59,15 @@ var myBasket = {
     return total;
   },
 
-
-
-
   bogof: function(){
-    var filterBogof = function(item){
-      if(item.bogof === true){
-        return true;
-      }
-      else {
-        return false;
-      }
-    }
-    var bogofArray = this.items.filter(filterBogof);
-    var oneOfEachItemArray = [];
-    for(item of bogofArray){
-      if(!oneOfEachItemArray.contains(item)){
-        oneOfEachItemArray.push(item);
-      }
-    }
     var priceToDiscount = 0;
+    var bogofArray = this.items.collect("bogof", true);
+    var oneOfEachItemArray = bogofArray.unique();
    
     for(var item of oneOfEachItemArray){
-      var filterOnlyThisItem = function(item_to_find){
-        if(item == item_to_find){
-          return true;
-        }
-        else{
-          return false;
-        }
-      }
-      var arrayOfThisItem = bogofArray.filter(filterOnlyThisItem);
-      var numberOfThisItem = arrayOfThisItem.length;
-      var remainder = numberOfThisItem % 2;
-      var numberOfPairs = numberOfThisItem - remainder;
-      var discountNumber = numberOfPairs / 2;
-      var price = item.price * discountNumber;
-      priceToDiscount += price;
+      var numberOfThisItem = bogofArray.collect("name", item.name).length;
+      var discountNumber = (numberOfThisItem - (numberOfThisItem % 2)) / 2;
+      priceToDiscount += (item.price * discountNumber);
     }
     return priceToDiscount;
   },
