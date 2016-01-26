@@ -17,11 +17,15 @@ var assert = require('assert');
 describe('Shopping Basket', function(){
   it('should calculate the total cost of all items', function(){
     var total = basket.total();
-    assert.equal(25, total);
+    assert.equal(26, total);
+  });
+  it('should take discount off for BOGOF items', function(){
+    var totalwithbogof = basket.totalwithbogof();
+    assert.equal(22, totalwithbogof);
   });
   it('should apply a 10% discount on baskets over £20', function(){
     var price = basket.price();
-    assert.equal(22.5, price)
+    assert.equal(19.8, price)
   });
 
 
